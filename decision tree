@@ -1,0 +1,48 @@
+company <- read.csv("C:/Users/india/Desktop/data science/assignments/decision tree/Company_Data.csv")
+head(company)
+nrow(company)
+str(company)
+boxplot(company)$out # 9 data point as outliers
+boxplot(scale(company[,c(1:6,8,9)])) # Sales, CompPrice and Price contains outlier.
+
+# Outlier treatment
+boxplot(company)$out
+outlie1 <- which(company$Sales >= min(boxplot(company$Sales)$out))#317,377
+outlie2 <- which(company$CompPrice == max(boxplot(company$CompPrice)$out)
+                 |company$CompPrice == min(boxplot(company$CompPrice)$out) )#43,311
+outlie3 <- which(company$Price <= 53 | company$Price >= 185)
+outlier <- c(outlie1,outlie2,outlie3)
+company_o <- company[-outlier,]
+boxplot(company_o)$out
+boxplot(company_o$Price)$out
+company_final <- company_o[company_o$Price >55,]
+nrow(company_final)
+
+SaleC <- ifelse(company_final$Sales > 8.5,"High","Low")
+df_c <- data.frame(company_final[,-1],SaleC)
+# Presence of missing values
+colSums(is.na(df_c)) # No missing data in my data set
+
+# Train Test Split of Data.
+set.seed(101);splitC <- sample(nrow(company_final),nrow(company_final)*.7,F)
+trainC <- df_c[splitC,]
+testC <- df_c[-splitC,]
+
+install.packages("randomForest")
+library("randomForest")
+set.seed(101);ModelF1 <- randomForest(trainC$SaleC~.,data = trainC[,-11])
+predF1 <- predict(ModelF1,testC[,-11])
+mean(testC$SaleC==predF1)
+table(Actual=testC$SaleC,Predicted=predF1)
+plot(ModelF1)
+set.seed(101);ModelF2 <- randomForest(trainC$SaleC~.,ntree = 400,mtry = 5,data=trainC)
+predF2 <- predict(ModelF2,testC[,-11])
+mean(testC$SaleC==predF2)
+plot(ModelF2)
+set.seed(101);tune <- tuneRF(trainC[,-11], trainC[,11], stepFactor = 0.5, plot = TRUE, ntreeTry = 300,
+                             trace = TRUE, improve = 0.5)
+set.seed(101);ModelF3 <- randomForest(trainC$SaleC~.,ntree = 400,mtry = 1,data=trainC)
+predF3 <- predict(ModelF3,testC[,-11])
+mean(testC$SaleC==predF3) 
+table(Actual = testC$SaleC,Predicted=predF3)
+plot(ModelF3)
