@@ -1,0 +1,16 @@
+install.packages("recommenderlab", dependencies=TRUE)
+install.packages("Matrix")
+library("recommenderlab")
+library(caTools)
+books<-read.csv("C:/Users/india/Desktop/data science/assignments/recommender system/book (1).csv")
+books
+str(books)
+books <- books[-c(1)]
+hist(books$Book.Rating)
+books_matrix<-as(books,'realRatingMatrix')
+books_recomm_model1 <- Recommender(books_matrix, method="POPULAR")
+recommended_items1 <- predict(books_recomm_model1, books_matrix[100:102], n=10)
+as(recommended_items1, "list")
+books_recomm_model2 <- Recommender(books_matrix, method="UBCF")
+recommended_items2 <- predict(books_recomm_model2, books_matrix, n=10, data=NULL, list="topNList")
+as(recommended_items2, "list")
