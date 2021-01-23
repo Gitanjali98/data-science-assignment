@@ -1,0 +1,142 @@
+install.packages("arules")
+library(arules)
+install.packages("arulesViz")
+library(arulesViz)
+install.packages("ggplot2")
+library(ggplot2)
+
+
+##GROCERIES
+groceries<-read.csv("C:/Users/india/Desktop/data science/assignments/association rules/groceries.csv")
+groceries
+summary(groceries)
+#minimum length=2, support=2%, confidence=50%
+rules<-apriori(groceries,parameter = list(minlen=2,support=0.02,confidence=0.5))
+rules
+summary(rules)
+inspect(head(sort(rules, by="lift")))
+plot(rules,jitter=0)
+head(quality(rules))
+plot(rules,method = "grouped")
+plot(rules,method = "scatterplot")
+plot(rules,method = "graph")
+plot(rules,method = "paracoord")
+plot(rules,method = "matrix3D")
+#minimum length=3, support=2%, confidence=60%
+rules1<-apriori(groceries,parameter = list(minlen=3,support=0.02,confidence=0.6))
+rules1
+summary(rules1)
+inspect(head(sort(rules1, by="lift")))
+plot(rules1,jitter=0)
+head(quality(rules1))
+plot(rules1,method = "grouped")
+plot(rules1,method = "scatterplot")
+plot(rules1,method = "graph")
+plot(rules1,method = "paracoord")
+plot(rules1,method = "matrix3D")
+#reduant values
+groceries_redundant1<-is.redundant(rules)
+summary(groceries_redundant1)
+groceries_redundant1<-(rules[is.redundant(rules)])
+arules::inspect(groceries_redundant1)
+groceries_redundant2<-is.redundant(rules1)
+summary(groceries_redundant2)
+groceries_redundant2<-(rules1[is.redundant(rules1)])
+arules::inspect(groceries_redundant2)
+#remove reduant values
+final_groceries_rule1<-(rules[!is.redundant(rules)])  
+arules::inspect(final_groceries_rule1)
+final_groceries_rule2<-(rules1[!is.redundant(rules1)])  
+arules::inspect(final_groceries_rule2)
+
+
+##BOOKS
+books<-read.csv("C:/Users/india/Desktop/data science/assignments/association rules/book (1).csv")
+books
+summary(books)
+#minimum length=1, support=3%, confidence=60%
+rules2<-apriori(books,parameter = list(minlen=1,support=0.03,confidence=0.6))
+rules2
+summary(rules2)
+inspect(head(sort(rules2, by="lift")))
+plot(rules2,jitter=0)
+head(quality(rules2))
+plot(rules2,type="h",jitter=0)
+plot(rules2,method = "grouped")
+plot(rules2,method = "scatterplot")
+plot(rules2,method = "graph")
+plot(rules2,method = "paracoord")
+plot(rules2,method = "matrix3D")
+#minimum length=3, support=2%, confidence=50%
+rules3<-apriori(books,parameter = list(minlen=3,support=0.02,confidence=0.5))
+rules3
+summary(rules3)
+inspect(head(sort(rules3, by="lift")))
+plot(rules3,jitter=0)
+head(quality(rules3))
+plot(rules3,type="h",jitter=0)
+plot(rules3,method = "grouped")
+plot(rules3,method = "scatterplot")
+plot(rules3,method = "graph")
+plot(rules3,method = "paracoord")
+plot(rules3,method = "matrix3D")
+#reduant values
+book_redundant1<-is.redundant(rules2)
+summary(book_redundant1)
+book_redundant1<-(rules2[is.redundant(rules2)])
+arules::inspect(book_redundant1)
+book_redundant2<-is.redundant(rules3)
+summary(book_redundant2)
+book_redundant2<-(rules3[is.redundant(rules3)])
+arules::inspect(book_redundant2)
+#remove reduant values
+final_book_rule1<-(rules2[!is.redundant(rules2)])  
+arules::inspect(final_book_rule1)
+final_book_rule2<-(rules3[!is.redundant(rules3)])  
+arules::inspect(final_book_rule2)
+
+
+##movies
+movies<-read.csv("C:/Users/india/Desktop/data science/assignments/association rules/my_movies.csv")
+movies
+summary(movies)
+#minimum length=4, support=20%, confidence=60%
+rules4<-apriori(movies,parameter = list(minlen=4,support=0.02,confidence=0.6))
+rules4
+summary(rules4)
+inspect(head(sort(rules4, by="lift")))
+plot(rules4,jitter=0)
+head(quality(rules4))
+plot(rules4,type="h",jitter=0)
+plot(rules4,method = "grouped")
+plot(rules4,method = "scatterplot")
+plot(rules4,method = "graph")
+plot(rules4,method = "paracoord")
+plot(rules4,method = "matrix3D")
+#minimum length=4, support=20%, confidence=55%
+rules5<-apriori(movies,parameter = list(minlen=2,support=0.03,confidence=0.55))
+rules5
+summary(rules5)
+inspect(head(sort(rules5, by="lift")))
+plot(rules5,jitter=0)
+head(quality(rules5))
+plot(rules5,type="h",jitter=0)
+plot(rules5,method = "grouped")
+plot(rules5,method = "scatterplot")
+plot(rules5,method = "graph")
+plot(rules5,method = "paracoord")
+plot(rules5,method = "matrix3D")
+#reduant values
+movies_redundant1<-is.redundant(rule4)
+summary(movies_redundant1)
+movies_redundant1<-(rules4[is.redundant(rules4)])
+arules::inspect(movies_redundant1)
+movies_redundant2<-is.redundant(rules5)
+summary(movies_redundant2)
+movies_redundant2<-(rules5[is.redundant(rules5)])
+arules::inspect(movies_redundant2)
+#remove reduant values
+final_movies_rule1<-(rules4[!is.redundant(rules4)])  
+arules::inspect(final_movies_rule1)
+final_movies_rule2<-(rules5[!is.redundant(rules5)])  
+arules::inspect(final_movies_rule2)
